@@ -2,40 +2,49 @@
 #include "ordenamientos.h"
 #include "utilerias.h"
 
-//HeapSort
-void HeapSort(int* A, int size){
-	int heapSize = BuildHeap(A,size);
+void HeapSort(int* A, int size, SortStats *stats){
+	int heapSize = BuildHeap(A,size, stats);
 	int i;
 	for(i = size - 1; i > 0; i--){
+		//Intercambio
+		stats->swaps++;
 		swap(&A[0],&A[heapSize]);
 		heapSize--;
-		Heapify(A, 0,size, heapSize);
+		Heapify(A, 0,size, heapSize, stats);
 	}
 }
 
-int BuildHeap(int* A, int size){
+int BuildHeap(int* A, int size, SortStats *stats){
 	int heapSize = size - 1;
 	int i;
 	for(i = (size - 1) / 2; i >= 0; i--){
-		Heapify(A, i,size, heapSize);
+		Heapify(A, i,size, heapSize, stats);
 	}
 
 	return heapSize;
 }
 
-void Heapify(int* A, int i, int size, int heapSize) {
+void Heapify(int* A, int i, int size, int heapSize, SortStats *stats) {
 	int l = 2 * i + 1;
 	int r = 2 * i + 2;
 	int largest;
 
+	//Comparaciones x2
+	stats->comparisons += 2;
 	if(l <= heapSize && A[l] > A[i])
-		largest = l;
+	largest = l;
 	else
-		largest = i;
+	largest = i;
+	//Comparaciones x2
+	stats->comparisons += 2;
 	if(r <= heapSize && A[r] > A[largest])
-		largest = r;
+	largest = r;
+	//Comparación
+	stats->comparisons++;
 	if(largest != i){
+		//Intercambio
+		stats->swaps++;
 		swap(&A[i],&A[largest]);
-		Heapify(A, largest,size, heapSize);
+		Heapify(A, largest,size, heapSize, stats);
 	}
 }
