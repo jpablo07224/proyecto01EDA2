@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "ordenamientos.h"
+#include "quickSort.h"
 #include "utilerias.h"
 
 void quickSort(int arr[], int low, int high, SortStats *stats){

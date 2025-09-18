@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "ordenamientos.h"
+#include "mergeSort.h"
 #include "utilerias.h"
 
 void merge(int arr[], int left, int mid, int right, SortStats *stats) {

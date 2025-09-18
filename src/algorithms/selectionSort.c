@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "ordenamientos.h"
+#include "selectionSort.h"
 #include "utilerias.h"
 
 void selectionSort(int arreglo[], int n, SortStats *stats){

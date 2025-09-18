@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "ordenamientos.h"
+#include "bubbleSort.h"
 #include "utilerias.h"
 
 //Comparaciones e intercambios

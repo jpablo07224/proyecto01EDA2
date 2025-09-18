@@ -1,4 +1,4 @@
 #pragma once
 
-void quickSort(int arr[], int low, int high);
-int partition (int arr[], int low, int high);
+void quickSort(int arr[], int low, int high, SortStats *stats);
+int partition (int arr[], int low, int high, SortStats *stats);

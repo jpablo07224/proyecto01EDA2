@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "ordenamientos.h"
+#include "insertionSort.h"
 #include "utilerias.h"
 
 void insertionSort(int a[], int n, SortStats *stats){

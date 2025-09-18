@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "ordenamientos.h"
+#include "heapSort.h"
 #include "utilerias.h"
 
 void HeapSort(int* A, int size, SortStats *stats){
