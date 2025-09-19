@@ -25,22 +25,6 @@
 #define MENU_ARRAY_5000 5
 #define MENU_ARRAY_10000 6
 
-//Encapsular los datos
-typedef struct {
-	//Prevenir overflow
-    long long comparisons;
-    long long swaps;
-    long long insertions;
-
-	long long dataSize;
-} SortStats;
-
-SortStats initializeSortStats(int size) {
-	SortStats stats;
-	SortStats.dataSize = size;
-	return stats;
-}
-
 void swap(int *a, int *b) {
 	int tempt = *a;
 	*a = *b;
