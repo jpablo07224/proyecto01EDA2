@@ -69,12 +69,13 @@ int main (){
         printf("0: 50\n");
         printf("1: 100\n");
         printf("2: 500\n");
+        printf("3: 800\n");
 
-        printf("3: 1,000\n");
-        printf("4: 2,000\n");
-        printf("5: 5,000\n");
+        printf("4: 1,000\n");
+        printf("5: 2,000\n");
+        printf("6: 5,000\n");
 
-        printf("6: 10,000\n");
+        printf("7: 10,000\n");
 
         scanf("%d", &longitud);
 
