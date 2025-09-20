@@ -1,0 +1,31 @@
+*.class
+*.Identifier
+
+*.csv
+main
+*.zip
+*.pdf
+.vscode
+*.png
+
+#Carpetas
+png/
+
+# Archivos objeto
+*.o
+*.obj
+
+# Ejecutables
+*.exe
+*.out
+
+# Archivos de dependencias
+*.d
+
+# Directorios de build
+/build/
+/bin/
+/debug/
+/release/
+/pdf/
+/obj/
