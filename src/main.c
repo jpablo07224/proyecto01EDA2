@@ -23,6 +23,18 @@ int main (){
     //Promedio de los datos
     SortStats averageStats = getNewStats(lengths[longitud]);
 
+    //Archivo para exportar los datos
+    FILE *archivoResultados = fopen("resultados.csv", "w");
+
+    //Verificando
+    if (archivoResultados == NULL) {
+        printf("Error al abrir el archivo de resultados.\n");
+        // return 1;
+    }
+
+    //Cabecera del CSV
+    fprintf(archivoResultados, "Algoritmo,Tamaño,Comparaciones,Intercambios,Inserciones\n");
+
     while (true) {
 
     /* Algoritmos */
@@ -146,6 +158,14 @@ int main (){
         printf("\n\t\t| Tabla de promedios |\n\n");
         getAverageStats(&averageStats);
         printResultsTable(algorithms[algoritmo], size, &averageStats);
+
+        //Escribir los datos Promedio en el archivo resultados
+        fprintf(archivoResultados, "%s,%i,%lli,%lli,%lli\n", 
+                algorithms[algoritmo],
+                size,
+                averageStats.comparisons,
+                averageStats.swaps,
+                averageStats.insertions);
 
         //Evitar que se repita el ciclo inmediatamente
         printf("\nPresiona ENTER para continuar...\n\n");

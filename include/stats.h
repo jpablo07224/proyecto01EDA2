@@ -1,5 +1,7 @@
 #pragma once
 
+#define ALG_NUM_EXECUTIONS 5
+
 //Encapsular los datos
 typedef struct {
 	//Prevenir overflow

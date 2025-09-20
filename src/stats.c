@@ -3,11 +3,15 @@
 
 SortStats getNewStats(int size) {
 	SortStats stats;
+
+	//inicializar valores
     initStats(&stats);
 	stats.dataSize = size;
+
 	return stats;
 }
 
+//Inicializar en ceros
 void initStats(SortStats *stats) {
 	stats->comparisons = 0;
 	stats->swaps = 0;
@@ -21,9 +25,9 @@ void sumStats(SortStats *stats, SortStats *averageStats) {
 }
 
 void getAverageStats(SortStats *averageStats) {
-	averageStats->comparisons /=  5;
-	averageStats->swaps /= 5;
-	averageStats->insertions /= 5;
+	averageStats->comparisons /=  ALG_NUM_EXECUTIONS;
+	averageStats->swaps /= ALG_NUM_EXECUTIONS;
+	averageStats->insertions /= ALG_NUM_EXECUTIONS;
 }
 
 void printCurrentStats(SortStats *stats) {
