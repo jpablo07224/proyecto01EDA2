@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h> //malloc
 #include "utilerias.h"
+#include "algoritmos.h"
 
 void swap(int *a, int *b) {
 	int tempt = *a;
@@ -48,4 +49,49 @@ int getMax(int arr[], int n) {
         }
     }
     return max;
+}
+
+//Menú ejecución del algoritmo y tamaño
+void ejecutarAlgoritmo(int lista[], int size, int algorithm, SortStats stats, SortStats *avgStats) {
+	switch (algorithm) {
+		case 0:
+			insertionSort(lista, size, &stats);
+		break;
+		case 1:
+			selectionSort(lista, size, &stats);
+		break;
+		case 2:
+			bubbleSort(lista, size, &stats);
+		break;
+		case 3:
+			quickSort(lista, 0, size - 1, &stats);
+		break;
+		case 4:
+			HeapSort(lista, size, &stats);
+		break;
+		case 5:
+			mergeSort(lista, 0, size - 1, &stats);
+		break;
+		case 6:
+			shellSort(lista, size, &stats);
+		break;
+		case 7:
+			gnomeSort(lista, size, &stats);
+		break;
+		case 8:
+			timsort(lista, size, &stats);
+		break;
+		case 9:
+			countingSort(lista, size, &stats);
+		break;
+		case 10:
+			radixSort(lista, size, &stats);
+		break;
+		default:
+			printf("Opción no valida\n");
+		break;
+	}
+
+	sumStats(&stats, avgStats);
+	printCurrentStats(&stats);
 }

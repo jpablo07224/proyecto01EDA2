@@ -3,182 +3,155 @@
 #include <stdlib.h> // malloc
 #include <stdbool.h>
 #include <time.h>
+#include <string.h> //strcmp
 
 #include "algoritmos.h"
 #include "utilerias.h"
 #include "stats.h"
 
-int main (){
+int main (int argc, char*argv[]){
     srand(time(NULL));
 
-    //Longitudes de los arreglos
+    // Algoritmos y Longitudes
     int lengths[] = {50, 100, 500, 800, 1000, 2000, 5000, 10000};
     char algorithms[][20] = {"InsertionSort", "SelectionSort", "BubbleSort", "QuickSort", "HeapSort", "MergeSort", "ShellSort", "GnomeSort", "TimSort", "CountingSort", "RadixSort"};
 
-    //opciones para el menú
-    int algoritmo, longitud;
-
-    //Arreglo dinámico
-    int *arregloNumeros;
-    //Promedio de los datos
-    SortStats averageStats = getNewStats(lengths[longitud]);
-
-    //Archivo para exportar los datos
+    // Abrir archivo en modo escritura
     FILE *archivoResultados = fopen("resultados.csv", "w");
 
-    //Verificando
-    if (archivoResultados == NULL) {
+    if (archivoResultados == NULL) { //Verificando
         printf("Error al abrir el archivo de resultados.\n");
         // return 1;
     }
 
-    //Cabecera del CSV
+    // Escribir la cabecera del CSV
     fprintf(archivoResultados, "Algoritmo,Tamaño,Comparaciones,Intercambios,Inserciones\n");
 
-    while (true) {
+    //Revisar si recibio argumentos al ejecutarse
+    if (argc == 2 && strcmp(argv[1], "auto") == 0) {
+        // ----- Modo automático ----
+        printf("Iniciando ejecución en modo autmático...\n");
 
-    /* Algoritmos */
-        printf("\nSeleccionar algoritmo: \n");
+        for (int currentAlg = 0; currentAlg < 11; currentAlg++) {
+            for (int size = 0; size < 8; size++) {
+                SortStats currentStats = getNewStats(lengths[size]);
+                SortStats averageStats = getNewStats(lengths[size]);
 
-        printf("0: InsertionSort\n");
-        printf("1: SelectionSort\n");
-        printf("2: BubbleSort\n");
+                printf("Algoritmo: %s\t Tamaño: %i\n", algorithms[currentAlg], lengths[size]);
 
-        printf("3: QuickSort\n");
-        printf("4: HeapSort\n");
-        printf("5: MergeSort\n");
+                for (int k = 0; k < 5; k++) {
+                    int *lista = createRandomArray(lengths[size]);
+                    ejecutarAlgoritmo(lista, lengths[size], currentAlg, currentStats, &averageStats);
+                    free(lista);
+                }
+                getAverageStats(&averageStats);
 
-        printf("6: ShellSort\n");
-        printf("7: GnomeSort\n");
-        printf("8: TimSort\n");
+                printf("\tPromedios\n");
+                printResultsTable(algorithms[currentAlg], lengths[size], &averageStats);
+                printf("--------------------------------\n");
 
-        printf("9: CountingSort\n");
-        printf("10: RadixSort\n");
-
-        printf("11: Exit (abortar)\n");
-        
-        scanf("%d", &algoritmo);
-
-        // Abortar ejecución (opción Exit)
-        if (algoritmo == MENU_EXIT)
-            break;
-
-    /* Cantidad de datos por arreglo */
-        printf("Número de valores por arreglo: \n");
-
-        printf("0: 50\n");
-        printf("1: 100\n");
-        printf("2: 500\n");
-        printf("3: 800\n");
-
-        printf("4: 1,000\n");
-        printf("5: 2,000\n");
-        printf("6: 5,000\n");
-
-        printf("7: 10,000\n");
-
-        scanf("%d", &longitud);
-
-        //Datos seleccionados
-        printf("\nAlgoritmo: %s\n", algorithms[algoritmo]);
-        printf("Long. del arreglo: %i\n", lengths[longitud]);
-        
-        printf("-----------------------------------\n");
-
-        int size = lengths[longitud];
-        SortStats currentStats = getNewStats(size);
-
-        for (int i = 0; i < 5; i++) {
-            //Arreglo dinámico
-            arregloNumeros = createRandomArray(size);
-            //Llamada al algoritmo correspondiente
-            switch (algoritmo) {
-                case 0:
-                insertionSort(arregloNumeros, size, &currentStats);
-                sumStats(&currentStats, &averageStats);
-                printCurrentStats(&currentStats);
-                break;
-                case 1:
-                selectionSort(arregloNumeros, size, &currentStats);
-                sumStats(&currentStats, &averageStats);
-                printCurrentStats(&currentStats);
-                break;
-                case 2:
-                bubbleSort(arregloNumeros, size, &currentStats);
-                sumStats(&currentStats, &averageStats);
-                printCurrentStats(&currentStats);
-                break;
-                case 3:
-                quickSort(arregloNumeros, 0, size - 1, &currentStats);
-                sumStats(&currentStats, &averageStats);
-                printCurrentStats(&currentStats);
-                break;
-                case 4:
-                HeapSort(arregloNumeros, size, &currentStats);
-                sumStats(&currentStats, &averageStats);
-                printCurrentStats(&currentStats);
-                break;
-                case 5:
-                mergeSort(arregloNumeros, 0, size - 1, &currentStats);
-                sumStats(&currentStats, &averageStats);
-                printCurrentStats(&currentStats);
-                break;
-                case 6:
-                shellSort(arregloNumeros, size, &currentStats);
-                sumStats(&currentStats, &averageStats);
-                printCurrentStats(&currentStats);
-                break;
-                case 7:
-                gnomeSort(arregloNumeros, size, &currentStats);
-                sumStats(&currentStats, &averageStats);
-                printCurrentStats(&currentStats);
-                break;
-                case 8:
-                timsort(arregloNumeros, size, &currentStats);
-                sumStats(&currentStats, &averageStats);
-                printCurrentStats(&currentStats);
-                break;
-                case 9:
-                countingSort(arregloNumeros, size, &currentStats);
-                sumStats(&currentStats, &averageStats);
-                printCurrentStats(&currentStats);
-                break;
-                case 10:
-                radixSort(arregloNumeros, size, &currentStats);
-                sumStats(&currentStats, &averageStats);
-                printCurrentStats(&currentStats);
-                break;
-                default:
-
-                break;
+                fprintf(archivoResultados, "%s,%i,%lli,%lli,%lli\n", 
+                        algorithms[currentAlg],
+                        lengths[size],
+                        averageStats.comparisons,
+                        averageStats.swaps,
+                        averageStats.insertions);
             }
-
         }
 
-        //Obtener promedio
-        printf("\n\t\t| Tabla de promedios |\n\n");
-        getAverageStats(&averageStats);
-        printResultsTable(algorithms[algoritmo], size, &averageStats);
+    } else {
 
-        //Escribir los datos Promedio en el archivo resultados
-        fprintf(archivoResultados, "%s,%i,%lli,%lli,%lli\n", 
-                algorithms[algoritmo],
-                size,
-                averageStats.comparisons,
-                averageStats.swaps,
-                averageStats.insertions);
+        int algoritmo, longitud; //opciones para el menú
+        int *arregloNumeros; //Arreglo dinámico
+        SortStats averageStats; //Promedio de los datos
 
-        //Evitar que se repita el ciclo inmediatamente
-        printf("\nPresiona ENTER para continuar...\n\n");
-        char buffer;
-        scanf("%c", &buffer);
-        getchar();
+        while (true) {
+            // Algoritmos 
+            printf("\nSeleccionar algoritmo: \n");
 
-        //reinicializar en 0
-        initStats(&averageStats);
+            printf("0: InsertionSort\n");
+            printf("1: SelectionSort\n");
+            printf("2: BubbleSort\n");
+
+            printf("3: QuickSort\n");
+            printf("4: HeapSort\n");
+            printf("5: MergeSort\n");
+
+            printf("6: ShellSort\n");
+            printf("7: GnomeSort\n");
+            printf("8: TimSort\n");
+
+            printf("9: CountingSort\n");
+            printf("10: RadixSort\n");
+
+            printf("11: Exit (abortar)\n");
+            
+            scanf("%d", &algoritmo);
+
+            // Abortar ejecución (opción Exit)
+            if (algoritmo == MENU_EXIT)
+                break;
+
+            //Cantidad de datos por arreglo
+            printf("Número de valores por arreglo: \n");
+
+            printf("0: 50\n");
+            printf("1: 100\n");
+            printf("2: 500\n");
+            printf("3: 800\n");
+
+            printf("4: 1,000\n");
+            printf("5: 2,000\n");
+            printf("6: 5,000\n");
+
+            printf("7: 10,000\n");
+
+            scanf("%d", &longitud);
+
+            averageStats = getNewStats(lengths[longitud]);
+
+            //Datos seleccionados
+            printf("\nAlgoritmo: %s\n", algorithms[algoritmo]);
+            printf("Long. del arreglo: %i\n", lengths[longitud]);
+            
+            printf("-----------------------------------\n");
+
+            int size = lengths[longitud];
+            SortStats currentStats = getNewStats(size);
+
+            for (int i = 0; i < 5; i++) {
+                //Arreglo dinámico
+                arregloNumeros = createRandomArray(size);
+
+                //Llamada al algoritmo correspondiente
+                ejecutarAlgoritmo(arregloNumeros, size, algoritmo, currentStats, &averageStats);
+            }
+
+            //Obtener promedio
+            printf("\n\t\t| Tabla de promedios |\n\n");
+            getAverageStats(&averageStats);
+            printResultsTable(algorithms[algoritmo], size, &averageStats);
+
+            //Escribir los datos Promedio en el archivo resultados
+            fprintf(archivoResultados, "%s,%i,%lli,%lli,%lli\n", 
+                    algorithms[algoritmo],
+                    size,
+                    averageStats.comparisons,
+                    averageStats.swaps,
+                    averageStats.insertions);
+
+            //Evitar que se repita el ciclo inmediatamente
+            printf("\nPresiona ENTER para continuar...\n\n");
+            char buffer;
+            scanf("%c", &buffer);
+            getchar();
+
+            initStats(&averageStats); //reinicializar en 0
+            free(arregloNumeros); //Liberar memoria
+        }
     }
-
-    free(arregloNumeros);
+    
+    fclose(archivoResultados); //Cerrar archivo
 
     return 0;
 }

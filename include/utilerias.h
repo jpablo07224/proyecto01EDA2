@@ -1,5 +1,7 @@
 #pragma once
 
+#include "stats.h"
+
 #define MENU_ALG_INSERTIONSORT 0
 #define MENU_ALG_SELECTIONSORT 1
 #define MENU_ALG_BUBBLESORT 2
@@ -32,3 +34,5 @@ void printSubArray(int arr[],int low, int high);
 int* createRandomArray(int size);
 
 int getMax(int arr[], int n);
+
+void ejecutarAlgoritmo(int lista[], int size, int algorithm, SortStats stats, SortStats *avgStats);
