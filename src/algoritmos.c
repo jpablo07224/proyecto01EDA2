@@ -1,8 +1,9 @@
 #include <stdio.h>
-#include <stdlib.h> //<---
+#include <stdlib.h>
 
 #include "utilerias.h"
-
+#include "stats.h"
+#include "algoritmos.h"
 
 // -- BubbleSort con mejora --
 void bubbleSort(int a[], int size, SortStats *stats) {
@@ -14,14 +15,14 @@ void bubbleSort(int a[], int size, SortStats *stats) {
             //Comparaciones
             stats->comparisons++;
             if (a[j] > a[j+1]){
-                printf("Intercambiando %i [%i] por %i [%i]\n", a[j], j, a[j+1], j+1);
+                // printf("Intercambiando %i [%i] por %i [%i]\n", a[j], j, a[j+1], j+1);
                 stats->swaps++;
 				swap(&a[j], &a[j+1]);
 				sinCambios = 0;
             }
         }
 		if (sinCambios) {//Parar si ya no hay cambios
-			printf("Deteniendo ejecución de bubbleSort en la vuelta #%i...", size - i);
+			// printf("Deteniendo ejecución de bubbleSort en la vuelta #%i...", size - i);
             break;
         }
     }
@@ -109,7 +110,7 @@ void Heapify(int* A, int i, int size, int heapSize, SortStats *stats) {
 
 // -- InsertionSort --
 void insertionSort(int a[], int n, SortStats *stats){
-	int i,j,k; // Indices
+	int i,j; // Indices
 	int aux; // Copia del valor
 
 	for(i=1; i<n; i++){
@@ -118,7 +119,7 @@ void insertionSort(int a[], int n, SortStats *stats){
 		//Comparación
 		while (j>0 && aux < a[j-1]){
 			stats->comparisons++;
-            printf("Intercambiando %i [%i] por %i [%i]\n", a[j], j, a[j-1], j-1);
+            // printf("Intercambiando %i [%i] por %i [%i]\n", a[j], j, a[j-1], j-1);
 			//Intercambio
 			stats->swaps++;
 			a[j] = a[j-1];
@@ -135,8 +136,8 @@ void merge(int arr[], int left, int mid, int right, SortStats *stats) {
     int n1 = mid - left + 1;
     int n2 = right - mid;
 
-    int L[] = new int[n1];
-    int R[] = new int[n2];
+    int L[n1];
+    int R[n2];
 
     // Copiando los valores a las sublistas
     for (int i = 0; i < n1; ++i)
@@ -178,8 +179,8 @@ void mergeSort(int arr[], int left, int right, SortStats *stats) {
     if (left < right) {
         int mid = (left + right) / 2;
 
-        mergeSort(arr, left, mid);
-        mergeSort(arr, mid + 1, right);
+        mergeSort(arr, left, mid, stats);
+        mergeSort(arr, mid + 1, right, stats);
 
         merge(arr, left, mid, right, stats);
     }
@@ -228,7 +229,7 @@ void selectionSort(int arreglo[], int n, SortStats *stats){
 		if (i != indiceMenor){
 			//Intercambio
 			stats->swaps++;
-            printf("Intercambiando %i [%i] por %i [%i]\n", arreglo[i], i, arreglo[indiceMenor], indiceMenor);
+            // printf("Intercambiando %i [%i] por %i [%i]\n", arreglo[i], i, arreglo[indiceMenor], indiceMenor);
 			swap(&arreglo[i],&arreglo[indiceMenor]);
             
 		}
@@ -268,7 +269,6 @@ void shellSort(int arr[], int n , SortStats *stats) {
 }
 
 // -- TimSort --
-#define RUN 32
 
 // Función de inserción para ordenar las "runs" de Timsort
 void insertionSortTim(int arr[], int left, int right, SortStats *stats) {

@@ -1,7 +1,18 @@
 #pragma once
 
-SortStats initializeSortStats(int size);
+//Encapsular los datos
+typedef struct {
+	//Prevenir overflow
+    long long comparisons;
+    long long swaps;
+    long long insertions;
 
-void initStats(SortStats *stats)
+	long long dataSize;
+} SortStats;
 
-void printResultsTable(const char* Algorithm, int size, const AvgStats* stats);
+SortStats getNewStats(int size);
+void initStats(SortStats *stats);
+void sumStats(SortStats *stats, SortStats *averageStats);
+void getAverageStats(SortStats *averageStats);
+void printCurrentStats(SortStats *stats);
+void printResultsTable(const char *algorithm, int size, SortStats *stats);

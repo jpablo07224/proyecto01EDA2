@@ -1,4 +1,8 @@
+#include "stats.h"
+
 #pragma once
+
+#define RUN 32
 
 void bubbleSort(int a[], int size, SortStats *stats);
 
@@ -18,7 +22,7 @@ int partition (int arr[], int low, int high, SortStats *stats);
 
 void selectionSort(int arreglo[], int n, SortStats *stats);
 
-void shellSort(int arr[], int n , SortStats *stats);
+void shellSort(int arr[], int n, SortStats *stats);
 
 void insertionSortTim(int arr[], int left, int right, SortStats *stats);
 void mergeTim(int arr[], int l, int m, int r, SortStats *stats);

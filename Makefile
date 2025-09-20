@@ -4,7 +4,7 @@ CC = gcc
 # Flags (opciones) para el compilador. -g para debug, -Wall para warnings, -I para decirle dónde buscar los .h
 CFLAGS = -g -Wall -Iinclude
 # Nombre del programa ejecutable final
-TARGET = bin/mi_programa
+TARGET = bin/proyecto
 
 # Directorios
 SRCDIR = src

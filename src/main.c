@@ -6,19 +6,22 @@
 
 #include "algoritmos.h"
 #include "utilerias.h"
+#include "stats.h"
 
 int main (){
     srand(time(NULL));
 
     //Longitudes de los arreglos
     int lengths[] = {50, 100, 500, 800, 1000, 2000, 5000, 10000};
-    char algorithms[][] = {"InsertionSort", "SelectionSort", "BubbleSort", "QuickSort", "HeapSort", "MergeSort", "ShellSort", "GnomeSort", "TimSort", "CountingSort", "RadixSort"};
+    char algorithms[][20] = {"InsertionSort", "SelectionSort", "BubbleSort", "QuickSort", "HeapSort", "MergeSort", "ShellSort", "GnomeSort", "TimSort", "CountingSort", "RadixSort"};
 
     //opciones para el menú
     int algoritmo, longitud;
 
     //Arreglo dinámico
-    int *listaNumeros;
+    int *arregloNumeros;
+    //Promedio de los datos
+    SortStats averageStats = getNewStats(lengths[longitud]);
 
     while (true) {
 
@@ -64,44 +67,97 @@ int main (){
         scanf("%d", &longitud);
 
         //Datos seleccionados
-        printf("Algoritmo: \n", algorithms[algoritmo]);
-        printf("Long. del arreglo: \n", lengths[longitud]);
+        printf("\nAlgoritmo: %s\n", algorithms[algoritmo]);
+        printf("Long. del arreglo: %i\n", lengths[longitud]);
+        
+        printf("-----------------------------------\n");
 
-        //Arreglo dinámico
-        int n;
-        printf("Longitud:");
-        scanf("%i", &n);
-        listaNumeros = (int *) malloc(lengths[n] * sizeof(int));
+        int size = lengths[longitud];
+        SortStats currentStats = getNewStats(size);
 
-        //Verificar asignación de memoria
-        if (listaNumeros == NULL)
-            return 1;
+        for (int i = 0; i < 5; i++) {
+            //Arreglo dinámico
+            arregloNumeros = createRandomArray(size);
+            //Llamada al algoritmo correspondiente
+            switch (algoritmo) {
+                case 0:
+                insertionSort(arregloNumeros, size, &currentStats);
+                sumStats(&currentStats, &averageStats);
+                printCurrentStats(&currentStats);
+                break;
+                case 1:
+                selectionSort(arregloNumeros, size, &currentStats);
+                sumStats(&currentStats, &averageStats);
+                printCurrentStats(&currentStats);
+                break;
+                case 2:
+                bubbleSort(arregloNumeros, size, &currentStats);
+                sumStats(&currentStats, &averageStats);
+                printCurrentStats(&currentStats);
+                break;
+                case 3:
+                quickSort(arregloNumeros, 0, size - 1, &currentStats);
+                sumStats(&currentStats, &averageStats);
+                printCurrentStats(&currentStats);
+                break;
+                case 4:
+                HeapSort(arregloNumeros, size, &currentStats);
+                sumStats(&currentStats, &averageStats);
+                printCurrentStats(&currentStats);
+                break;
+                case 5:
+                mergeSort(arregloNumeros, 0, size - 1, &currentStats);
+                sumStats(&currentStats, &averageStats);
+                printCurrentStats(&currentStats);
+                break;
+                case 6:
+                shellSort(arregloNumeros, size, &currentStats);
+                sumStats(&currentStats, &averageStats);
+                printCurrentStats(&currentStats);
+                break;
+                case 7:
+                gnomeSort(arregloNumeros, size, &currentStats);
+                sumStats(&currentStats, &averageStats);
+                printCurrentStats(&currentStats);
+                break;
+                case 8:
+                timsort(arregloNumeros, size, &currentStats);
+                sumStats(&currentStats, &averageStats);
+                printCurrentStats(&currentStats);
+                break;
+                case 9:
+                // countingSort(arregloNumeros, );
+                // sumStats(&currentStats, &averageStats);
+                // printCurrentStats(&currentStats);
+                break;
+                case 10:
+                // radixSort(arregloNumeros, );
+                // sumStats(&currentStats, &averageStats);
+                // printCurrentStats(&currentStats);
+                break;
+                default:
 
-        //Creación
-        for (int i = 0; i < lengths[n]; i++) {
-            listaNumeros[i] = rand() % (ALG_MAX_RANGE + 1);
+                break;
+            }
+
         }
 
-        //Llamada al algoritmo correspondiente
-        if (opcion == ALG_INSERTION_OPT)
-            insertionSort(copiaListaNumeros, ALG_ARRAY_LENGTH);
-        else if (opcion == ALG_SELECTION_OPT)
-            selectionSort(copiaListaNumeros, ALG_ARRAY_LENGTH);
-        else if (opcion == ALG_BUBBLE_OPT)
-            bubbleSort(copiaListaNumeros, ALG_ARRAY_LENGTH);
-        else if (opcion == ALG_QUICK_OPT)
-            quickSort(copiaListaNumeros, 0, ALG_ARRAY_LENGTH - 1);
-        else if (opcion == ALG_HEAP_OPT)
-            HeapSort(copiaListaNumeros, ALG_ARRAY_LENGTH);
+        //Obtener promedio
+        printf("\n\t\t| Tabla de promedios |\n\n");
+        getAverageStats(&averageStats);
+        printResultsTable(algorithms[algoritmo], size, &averageStats);
 
         //Evitar que se repita el ciclo inmediatamente
         printf("\nPresiona ENTER para continuar...\n\n");
         char buffer;
         scanf("%c", &buffer);
         getchar();
+
+        //reinicializar en 0
+        initStats(&averageStats);
     }
 
-    free(listaNumeros);
+    free(arregloNumeros);
 
     return 0;
 }
