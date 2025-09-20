@@ -8,24 +8,22 @@
 
 // -- BubbleSort con mejora --
 void bubbleSort(int a[], int size, SortStats *stats) {
-	int i, j, n;
-	n = size;
-    for (i = n-1; i > 0; i--) {
-        int sinCambios = 1;//bandera
-        for (j = 0; j < i; j++) {
-            //Comparaciones
+
+    for (int i = size - 1; i > 0; i--) {
+        int sinCambios = 1;
+
+        for (int j = 0; j < i; j++) {
             stats->comparisons++;
+
             if (a[j] > a[j+1]){
-                // printf("Intercambiando %i [%i] por %i [%i]\n", a[j], j, a[j+1], j+1);
                 stats->swaps++;
 				swap(&a[j], &a[j+1]);
 				sinCambios = 0;
             }
         }
-		if (sinCambios) {//Parar si ya no hay cambios
-			// printf("Deteniendo ejecución de bubbleSort en la vuelta #%i...", size - i);
+
+		if (sinCambios)
             break;
-        }
     }
 }
 
@@ -33,30 +31,21 @@ void bubbleSort(int a[], int size, SortStats *stats) {
 void gnomeSort(int arr[], int n, SortStats *stats) {
     int pos = 0;
     while (pos < n) {
-        // La primera parte de la condición no es una comparación de elementos
         if (pos == 0) {
             pos++;
             continue;
         }
-        
-        // Aquí se realiza la comparación clave
-        //Comparación
-        stats->comparisons++;
+
+        stats->comparisons++;   //Comparación
 
         if (arr[pos] >= arr[pos - 1]) {
-            // Si está en orden, avanza
-            pos++;
+            pos++;  // Si está en orden, avanza
         } else {
             // Si no, intercambia y retrocede
-            //Cambiar por swap
-            int temp = arr[pos];
-            arr[pos] = arr[pos - 1];
-            arr[pos - 1] = temp;
-
-            //Intercambio
-            stats->swaps++;
-
+            swap(&arr[pos - 1], &arr[pos]);
             pos--;
+
+            stats->swaps++; //Intercambio
         }
     }
 }
@@ -64,10 +53,9 @@ void gnomeSort(int arr[], int n, SortStats *stats) {
 // -- HeapSort --
 void HeapSort(int* A, int size, SortStats *stats){
 	int heapSize = BuildHeap(A,size, stats);
-	int i;
-	for(i = size - 1; i > 0; i--){
-		//Intercambio
-		stats->swaps++;
+
+	for(int i = size - 1; i > 0; i--){
+		stats->swaps++; //Intercambio
 		swap(&A[0],&A[heapSize]);
 		heapSize--;
 		Heapify(A, 0,size, heapSize, stats);
@@ -76,8 +64,8 @@ void HeapSort(int* A, int size, SortStats *stats){
 
 int BuildHeap(int* A, int size, SortStats *stats){
 	int heapSize = size - 1;
-	int i;
-	for(i = (size - 1) / 2; i >= 0; i--){
+
+	for(int i = (size - 1) / 2; i >= 0; i--){
 		Heapify(A, i,size, heapSize, stats);
 	}
 
@@ -87,22 +75,24 @@ int BuildHeap(int* A, int size, SortStats *stats){
 void Heapify(int* A, int i, int size, int heapSize, SortStats *stats) {
 	int l = 2 * i + 1;
 	int r = 2 * i + 2;
-	int largest;
+	int largest = i;
 
-	//Comparaciones x2
-	stats->comparisons += 2;
-	if(l <= heapSize && A[l] > A[i])
-	largest = l;
-	else
-	largest = i;
-	//Comparaciones x2
-	stats->comparisons += 2;
-	if(r <= heapSize && A[r] > A[largest])
-	largest = r;
-	//Comparación
+	stats->comparisons++;
+    if (l <= heapSize) {
+        stats->comparisons++;
+        if(A[l] > A[i])
+            largest = l;
+    }
+    
+	stats->comparisons++;
+	if(r <= heapSize) {
+        stats->comparisons++;
+        if (A[r] > A[largest]) 
+            largest = r;
+    }
+	
 	stats->comparisons++;
 	if(largest != i){
-		//Intercambio
 		stats->swaps++;
 		swap(&A[i],&A[largest]);
 		Heapify(A, largest,size, heapSize, stats);
@@ -111,23 +101,25 @@ void Heapify(int* A, int i, int size, int heapSize, SortStats *stats) {
 
 // -- InsertionSort --
 void insertionSort(int a[], int n, SortStats *stats){
-	int i,j; // Indices
-	int aux; // Copia del valor
+	int i,j;
+	int aux;
 
 	for(i=1; i<n; i++){
 		j=i;
 		aux=a[i];
-		//Comparación
-		while (j>0 && aux < a[j-1]){
-			stats->comparisons++;
-            // printf("Intercambiando %i [%i] por %i [%i]\n", a[j], j, a[j-1], j-1);
-			//Intercambio
-			stats->swaps++;
-			a[j] = a[j-1];
-			j--;
-		}
-		a[j]=aux;
+		
+        stats->comparisons++; //Comparación
 
+		while (j>0 && aux < a[j-1]){
+			stats->insertions++;
+			a[j] = a[j - 1];
+			j--;
+
+            if (j > 0) stats->comparisons++;
+		}
+
+		a[j]=aux;
+        stats->insertions++;
 	}
 }
 
@@ -151,8 +143,7 @@ void merge(int arr[], int left, int mid, int right, SortStats *stats) {
     int k = left;
     while (i < n1 && j < n2) {
 
-        //Comparación
-        stats->comparisons++;
+        stats->comparisons++; //Comparación
         if (L[i] <= R[j]) {
             arr[k] = L[i];
             i++;
@@ -198,41 +189,34 @@ void quickSort(int arr[], int low, int high, SortStats *stats){
 
 int partition (int arr[], int low, int high, SortStats *stats){
 	int pivot = arr[high];
-	int j,i = (low - 1);
-	for (j = low; j <= high- 1; j++){
-		//Comparación
-		stats->comparisons++;
-		if (arr[j] <= pivot){
+	int i = (low - 1);
+	for (int j = low; j <= high - 1; j++) {
+		stats->comparisons++; //Comparación
+		if (arr[j] <= pivot) {
 			i++;
-			//Intercambio
-			stats->swaps++;
+			stats->swaps++; //Intercambio
 			swap(&arr[i], &arr[j]);
 		}
 	}
-	//Intercambio
-	stats->swaps++;
+
+	stats->swaps++; //Intercambio
 	swap(&arr[i + 1], &arr[high]);
 	return (i + 1);
 }
 
 // -- SelectionSort --
 void selectionSort(int arreglo[], int n, SortStats *stats){
-	int indiceMenor, i, j; // indices
-
-	for (i = 0; i < n - 1; i++){
-		indiceMenor = i;
-		for (j = i + 1; j < n; j++){
-			//Comparación
-			stats->comparisons++;
+	for (int i = 0; i < n - 1; i++){
+		int indiceMenor = i;
+		for (int j = i + 1; j < n; j++){
+			stats->comparisons++; //Comparación
 			if (arreglo[j] < arreglo[indiceMenor])
 				indiceMenor = j;
 		}
+
 		if (i != indiceMenor){
-			//Intercambio
-			stats->swaps++;
-            // printf("Intercambiando %i [%i] por %i [%i]\n", arreglo[i], i, arreglo[indiceMenor], indiceMenor);
+			stats->swaps++; //Intercambio
 			swap(&arreglo[i],&arreglo[indiceMenor]);
-            
 		}
 	}
 }
@@ -241,6 +225,7 @@ void selectionSort(int arreglo[], int n, SortStats *stats){
 void shellSort(int arr[], int n , SortStats *stats) {
     // Calcula el gap inicial usando la secuencia de Knuth
     int gap = 1;
+
     while (gap < n / 3) {
         gap = 3 * gap + 1;
     }
@@ -253,17 +238,14 @@ void shellSort(int arr[], int n , SortStats *stats) {
             int j;
             
             // Desplaza los elementos anteriores del gap que son mayores
-            // Aquí contarías una comparación por cada vuelta del bucle
             for (j = i; j >= gap && arr[j - gap] > temp; j -= gap) {
-                //Comparación
-                stats->comparisons++;
+                stats->comparisons++; //Comparación
                 arr[j] = arr[j - gap];
-                //Intercambio
-                stats->swaps++;
+                stats->swaps++; //Intercambio
             }
-            //Comparación
+
             stats->comparisons++; // La comparación final que falla
-            
+
             arr[j] = temp;
         }
     }
@@ -278,14 +260,12 @@ void insertionSortTim(int arr[], int left, int right, SortStats *stats) {
         int j = i - 1;
 
         while (j >= left && arr[j] > temp) {
-            //Comparación
-            stats->comparisons++;
+            stats->comparisons++; //Comparación
             arr[j + 1] = arr[j];
-            //Intercambio
-            stats->swaps++;
+            stats->swaps++; //Intercambio
             j--;
         }
-        //Comparación
+
         stats->comparisons++; // La comparación que falla
         arr[j + 1] = temp;
     }
@@ -305,8 +285,7 @@ void mergeTim(int arr[], int l, int m, int r, SortStats *stats) {
     int i = 0, j = 0, k = l;
 
     while (i < len1 && j < len2) {
-        //Comparación
-        stats->comparisons++;
+        stats->comparisons++; //Comparación
 
         if (left[i] <= right[j]) {
             arr[k] = left[i];
@@ -396,16 +375,15 @@ void countingSort(int arr[], int n, SortStats *stats) {
 void radixSort(int arr[], int n, SortStats *stats) {
     if (n <= 1) return;
 
-    // Encuentra el número máximo para saber cuántos dígitos tiene
+    // Encuentra el número máximo
     int max = getMax(arr, n);
 
-    // Llama a la subrutina para cada dígito
     for (int exp = 1; max / exp > 0; exp *= 10) {
         distributeAndCollect(arr, n, exp, stats);
     }
 }
 
-// Esta función ordena el arreglo 'arr' según el dígito representado por 'exp'
+// Ordena el arreglo según el dígito representado por 'exp'
 void distributeAndCollect(int arr[], int n, int exp, SortStats *stats) {
     // Crea 10 cubetas (una para cada dígito de 0 a 9)
     Node* buckets[10] = {NULL};
