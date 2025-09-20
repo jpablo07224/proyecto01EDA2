@@ -38,3 +38,14 @@ int* createRandomArray(int size) {
 	
 	return listaNumeros;
 }
+
+// Función auxiliar para obtener el valor máximo del arreglo
+int getMax(int arr[], int n) {
+    int max = arr[0];
+    for (int i = 1; i < n; i++) {
+        if (arr[i] > max) {
+            max = arr[i];
+        }
+    }
+    return max;
+}

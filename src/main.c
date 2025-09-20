@@ -43,13 +43,13 @@ int main (){
         printf("9: CountingSort\n");
         printf("10: RadixSort\n");
 
-        // printf("11: Exit (abortar)\n");
+        printf("11: Exit (abortar)\n");
         
         scanf("%d", &algoritmo);
 
-        // // Abortar ejecución (opción Exit)
-        // if (algoritmo == MENU_EXIT)
-        //     break;
+        // Abortar ejecución (opción Exit)
+        if (algoritmo == MENU_EXIT)
+            break;
 
     /* Cantidad de datos por arreglo */
         printf("Número de valores por arreglo: \n");
@@ -126,14 +126,14 @@ int main (){
                 printCurrentStats(&currentStats);
                 break;
                 case 9:
-                // countingSort(arregloNumeros, );
-                // sumStats(&currentStats, &averageStats);
-                // printCurrentStats(&currentStats);
+                countingSort(arregloNumeros, size, &currentStats);
+                sumStats(&currentStats, &averageStats);
+                printCurrentStats(&currentStats);
                 break;
                 case 10:
-                // radixSort(arregloNumeros, );
-                // sumStats(&currentStats, &averageStats);
-                // printCurrentStats(&currentStats);
+                radixSort(arregloNumeros, size, &currentStats);
+                sumStats(&currentStats, &averageStats);
+                printCurrentStats(&currentStats);
                 break;
                 default:
 

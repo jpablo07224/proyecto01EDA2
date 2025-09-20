@@ -2,6 +2,12 @@
 
 #pragma once
 
+// Estructura para la lista de cada cubeta
+typedef struct Node{
+    int data;
+    struct Node* next;
+} Node;
+
 #define RUN 32
 
 void bubbleSort(int a[], int size, SortStats *stats);
@@ -27,3 +33,8 @@ void shellSort(int arr[], int n, SortStats *stats);
 void insertionSortTim(int arr[], int left, int right, SortStats *stats);
 void mergeTim(int arr[], int l, int m, int r, SortStats *stats);
 void timsort(int arr[], int n, SortStats *stats);
+
+void countingSort(int arr[], int n, SortStats *stats);
+
+void radixSort(int arr[], int n, SortStats *stats);
+void distributeAndCollect(int arr[], int n, int exp, SortStats *stats);

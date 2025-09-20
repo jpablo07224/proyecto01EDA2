@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "utilerias.h"
 #include "stats.h"
@@ -353,6 +354,92 @@ void timsort(int arr[], int n, SortStats *stats) {
 
 // -- CountingSort --
 
+void countingSort(int arr[], int n, SortStats *stats) {
+    if (n <= 1) return;
 
+    // Encuentra el número más grande para saber el tamaño del contador
+    int max = getMax(arr, n);
+
+    // Crea el arreglo de conteo y el arreglo de salida
+    int *count = (int *)malloc((max + 1) * sizeof(int));
+    int *output = (int *)malloc(n * sizeof(int));
+    
+    // Inicializa el arreglo de conteo a cero
+    memset(count, 0, (max + 1) * sizeof(int));
+
+    // Almacena la frecuencia de cada número
+    for (int i = 0; i < n; i++) {
+        count[arr[i]]++;
+    }
+
+    // Almacena la posición final de cada número
+    for (int i = 1; i <= max; i++) {
+        count[i] += count[i - 1];
+    }
+
+    // Construye el arreglo de salida
+    for (int i = n - 1; i >= 0; i--) {
+        output[count[arr[i]] - 1] = arr[i];
+        count[arr[i]]--;
+    }
+
+    // Copia el arreglo ordenado de vuelta al original
+    for (int i = 0; i < n; i++) {
+        arr[i] = output[i];
+    }
+
+    free(count);
+    free(output);
+}
 
 // -- RadixSort --
+void radixSort(int arr[], int n, SortStats *stats) {
+    if (n <= 1) return;
+
+    // Encuentra el número máximo para saber cuántos dígitos tiene
+    int max = getMax(arr, n);
+
+    // Llama a la subrutina para cada dígito
+    for (int exp = 1; max / exp > 0; exp *= 10) {
+        distributeAndCollect(arr, n, exp, stats);
+    }
+}
+
+// Esta función ordena el arreglo 'arr' según el dígito representado por 'exp'
+void distributeAndCollect(int arr[], int n, int exp, SortStats *stats) {
+    // Crea 10 cubetas (una para cada dígito de 0 a 9)
+    Node* buckets[10] = {NULL};
+    
+    // 1. Distribuye los números del arreglo en las cubetas
+    for (int i = 0; i < n; i++) {
+        int digit = (arr[i] / exp) % 10;
+        
+        // Crea un nuevo nodo
+        Node *newNode = (Node*)malloc(sizeof(Node));
+        newNode->data = arr[i];
+        newNode->next = NULL;
+        
+        // Agrega el nodo a la cubeta correspondiente
+        if (buckets[digit] == NULL) {
+            buckets[digit] = newNode;
+        } else {
+            Node *temp = buckets[digit];
+            while (temp->next != NULL) {
+                temp = temp->next;
+            }
+            temp->next = newNode;
+        }
+    }
+    
+    // 2. Recolecta los números de las cubetas de vuelta al arreglo
+    int index = 0;
+    for (int i = 0; i < 10; i++) {
+        Node* current = buckets[i];
+        while (current != NULL) {
+            arr[index++] = current->data;
+            Node *toFree = current;
+            current = current->next;
+            free(toFree); // Libera la memoria del nodo
+        }
+    }
+}

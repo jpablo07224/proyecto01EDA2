@@ -29,3 +29,5 @@ void printArray(int a[], int n);
 void printSubArray(int arr[],int low, int high);
 
 int* createRandomArray(int size);
+
+int getMax(int arr[], int n);
