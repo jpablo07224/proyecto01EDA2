@@ -35,7 +35,7 @@ int main (int argc, char*argv[]){
     }
 
     // Escribir la cabecera del CSV
-    fprintf(archivoResultados, "Algoritmo,Tamaño,Comparaciones,Intercambios,Inserciones,Bytes\n");
+    fprintf(archivoResultados, "Algoritmo,Tamanio,Comparaciones,Intercambios,Inserciones,Bytes\n");
 
     //Revisar si recibio argumentos al ejecutarse
     if (argc == 2 && strcmp(argv[1], "auto") == 0) {
