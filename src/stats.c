@@ -1,6 +1,6 @@
 /*
 -       Autor: Muñoz Peña Juan Pablo
--       Editores:
+-       Editores: Prado Garcia Juan David, Correa Sam Said
 -
 -       Fecha de última modificación: Martes 23 de Septiembre
 -

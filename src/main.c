@@ -1,5 +1,5 @@
 /*
--       Autor:
+-       Autor: Prado Garcia Juan David, Correa Sam Said
 -       Editores: Muñoz Peña Juan Pablo
 -
 -       Fecha de última modificación: Martes 23 de Septiembre
