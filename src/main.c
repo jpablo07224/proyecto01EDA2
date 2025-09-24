@@ -1,3 +1,13 @@
+-/*
+-       Autor:
+-       Editores: Muñoz Peña Juan Pablo
+-
+-       Fecha de última modificación: Martes 23 de Septiembre
+-
+-       Proposito: Función del programa principal (main), aquí es donde se ejecuta el menú y se encarga de exportar los datos.
+-
+-*/
+
 #include <stdio.h>
 
 #include <stdlib.h> // malloc
@@ -25,7 +35,7 @@ int main (int argc, char*argv[]){
     }
 
     // Escribir la cabecera del CSV
-    fprintf(archivoResultados, "Algoritmo,Tamaño,Comparaciones,Intercambios,Inserciones\n");
+    fprintf(archivoResultados, "Algoritmo,Tamaño,Comparaciones,Intercambios,Inserciones,Bytes\n");
 
     //Revisar si recibio argumentos al ejecutarse
     if (argc == 2 && strcmp(argv[1], "auto") == 0) {
@@ -50,12 +60,13 @@ int main (int argc, char*argv[]){
                 printResultsTable(algorithms[currentAlg], lengths[size], &averageStats);
                 printf("--------------------------------\n");
 
-                fprintf(archivoResultados, "%s,%i,%lli,%lli,%lli\n", 
+                fprintf(archivoResultados, "%s,%i,%lli,%lli,%lli,%lli\n", 
                         algorithms[currentAlg],
                         lengths[size],
                         averageStats.comparisons,
                         averageStats.swaps,
-                        averageStats.insertions);
+                        averageStats.insertions,
+                        averageStats.bytes);
             }
         }
 
@@ -133,12 +144,13 @@ int main (int argc, char*argv[]){
             printResultsTable(algorithms[algoritmo], size, &averageStats);
 
             //Escribir los datos Promedio en el archivo resultados
-            fprintf(archivoResultados, "%s,%i,%lli,%lli,%lli\n", 
+            fprintf(archivoResultados, "%s,%i,%lli,%lli,%lli,%lli\n", 
                     algorithms[algoritmo],
                     size,
                     averageStats.comparisons,
                     averageStats.swaps,
-                    averageStats.insertions);
+                    averageStats.insertions,
+                    averageStats.bytes);
 
             //Evitar que se repita el ciclo inmediatamente
             printf("\nPresiona ENTER para continuar...\n\n");

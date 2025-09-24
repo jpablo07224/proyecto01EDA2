@@ -1,3 +1,12 @@
+-/*
+-       Autor: Prado Garcia Juan David, Correa Sam Said, Muñoz Peña Juan Pablo
+-
+-       Fecha de última modificación: Martes 23 de Septiembre
+-
+-       Proposito: Archivo que contiene todos los algoritmos de ordenamiento usados en el programa.
+-
+-*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -125,25 +134,25 @@ void insertionSort(int a[], int n, SortStats *stats){
 
 // -- MergeSort --
 void merge(int arr[], int left, int mid, int right, SortStats *stats) {
-    // Longitudes de las listas
     int n1 = mid - left + 1;
     int n2 = right - mid;
 
     int L[n1];
     int R[n2];
+    
+    // MODIFICACIÓN: Suma los bytes de los arreglos temporales L y R
+    stats->bytes += (n1 + n2);
 
-    // Copiando los valores a las sublistas
+    // El resto de la función permanece igual...
     for (int i = 0; i < n1; ++i)
         L[i] = arr[left + i];
     for (int j = 0; j < n2; ++j)
         R[j] = arr[mid + 1 + j];
 
     int i = 0, j = 0;
-
     int k = left;
     while (i < n1 && j < n2) {
-
-        stats->comparisons++; //Comparación
+        stats->comparisons++;
         if (L[i] <= R[j]) {
             arr[k] = L[i];
             i++;
@@ -167,13 +176,12 @@ void merge(int arr[], int left, int mid, int right, SortStats *stats) {
     }
 }
 
+// La función mergeSort principal no necesita cambios
 void mergeSort(int arr[], int left, int right, SortStats *stats) {
     if (left < right) {
         int mid = (left + right) / 2;
-
         mergeSort(arr, left, mid, stats);
         mergeSort(arr, mid + 1, right, stats);
-
         merge(arr, left, mid, right, stats);
     }
 }
@@ -277,6 +285,10 @@ void mergeTim(int arr[], int l, int m, int r, SortStats *stats) {
     int len2 = r - m;
     int left[len1], right[len2];
 
+    // MODIFICACIÓN: Suma los bytes de los arreglos temporales
+    stats->bytes += (len1 + len2);
+
+    // El resto de la función permanece igual...
     for (int i = 0; i < len1; i++)
         left[i] = arr[l + i];
     for (int i = 0; i < len2; i++)
@@ -285,8 +297,7 @@ void mergeTim(int arr[], int l, int m, int r, SortStats *stats) {
     int i = 0, j = 0, k = l;
 
     while (i < len1 && j < len2) {
-        stats->comparisons++; //Comparación
-
+        stats->comparisons++;
         if (left[i] <= right[j]) {
             arr[k] = left[i];
             i++;
@@ -336,33 +347,32 @@ void timsort(int arr[], int n, SortStats *stats) {
 void countingSort(int arr[], int n, SortStats *stats) {
     if (n <= 1) return;
 
-    // Encuentra el número más grande para saber el tamaño del contador
     int max = getMax(arr, n);
-
+    
     // Crea el arreglo de conteo y el arreglo de salida
     int *count = (int *)malloc((max + 1) * sizeof(int));
     int *output = (int *)malloc(n * sizeof(int));
+
+    // MODIFICACIÓN: Suma los bytes de AMBOS arreglos creados
+    stats->bytes += (max + 1);
+    stats->bytes += n;
     
-    // Inicializa el arreglo de conteo a cero
+    // El resto de la función permanece igual...
     memset(count, 0, (max + 1) * sizeof(int));
 
-    // Almacena la frecuencia de cada número
     for (int i = 0; i < n; i++) {
         count[arr[i]]++;
     }
 
-    // Almacena la posición final de cada número
     for (int i = 1; i <= max; i++) {
         count[i] += count[i - 1];
     }
 
-    // Construye el arreglo de salida
     for (int i = n - 1; i >= 0; i--) {
         output[count[arr[i]] - 1] = arr[i];
         count[arr[i]]--;
     }
 
-    // Copia el arreglo ordenado de vuelta al original
     for (int i = 0; i < n; i++) {
         arr[i] = output[i];
     }
@@ -383,15 +393,18 @@ void radixSort(int arr[], int n, SortStats *stats) {
     }
 }
 
-// Ordena el arreglo según el dígito representado por 'exp'
+
 void distributeAndCollect(int arr[], int n, int exp, SortStats *stats) {
-    // Crea 10 cubetas (una para cada dígito de 0 a 9)
     Node* buckets[10] = {NULL};
+
+    // MODIFICACIÓN: Suma los bytes de todos los nodos que se crearán
+    // (un nodo por cada elemento del arreglo)
+    stats->bytes += n;
     
     // 1. Distribuye los números del arreglo en las cubetas
     for (int i = 0; i < n; i++) {
         int digit = (arr[i] / exp) % 10;
-        
+
         // Crea un nuevo nodo
         Node *newNode = (Node*)malloc(sizeof(Node));
         newNode->data = arr[i];
@@ -408,7 +421,7 @@ void distributeAndCollect(int arr[], int n, int exp, SortStats *stats) {
             temp->next = newNode;
         }
     }
-    
+
     // 2. Recolecta los números de las cubetas de vuelta al arreglo
     int index = 0;
     for (int i = 0; i < 10; i++) {
@@ -417,7 +430,7 @@ void distributeAndCollect(int arr[], int n, int exp, SortStats *stats) {
             arr[index++] = current->data;
             Node *toFree = current;
             current = current->next;
-            free(toFree); // Libera la memoria del nodo
+            free(toFree);// Libera la memoria del nodo
         }
     }
 }

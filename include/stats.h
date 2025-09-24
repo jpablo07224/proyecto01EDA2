@@ -8,6 +8,7 @@ typedef struct {
     long long comparisons;
     long long swaps;
     long long insertions;
+    long long bytes;
 
 	long long dataSize;
 } SortStats;

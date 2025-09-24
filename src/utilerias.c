@@ -1,3 +1,13 @@
+-/*
+-       Autor:
+-       Editores: Muñoz Peña Juan Pablo
+-
+-       Fecha de última modificación: Martes 23 de Septiembre
+-
+-       Proposito: Funciones de apoyo, tales como intercambio, creación de arreglos, obtener máximo, etc.
+-
+-*/
+
 #include <stdio.h>
 #include <stdlib.h> //malloc
 #include "utilerias.h"
