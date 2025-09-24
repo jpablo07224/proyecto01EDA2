@@ -10,7 +10,7 @@ set xlabel "Tamaño del Arreglo (n)"
 set ylabel "Suma de Operaciones (promedio)"
 set title font ",14"
 
-print "Generando 3 gráficas comparativas..."
+print "Generando 2 gráficas comparativas..."
 
 # --- Gráfica Comparativa 1: Cuadráticos ---
 set output 'comparativa_cuadraticos.png'
@@ -26,19 +26,10 @@ plot 'resultados.csv' using 2:(stringcolumn(1) eq "HeapSort" ? ($3+$4+$5) : 1/0)
      '' using 2:(stringcolumn(1) eq "MergeSort" ? ($3+$4+$5) : 1/0) title "MergeSort" with linespoints lc rgb '#911EB4' lw 2 pt 13 ps 1.5, \
      '' using 2:(stringcolumn(1) eq "QuickSort" ? ($3+$4+$5) : 1/0) title "QuickSort" with linespoints lc rgb '#000000' lw 2 pt 15 ps 1.5
 
-# --- Gráfica Comparativa 3: Otros ---
-set output 'comparativa_otros.png'
-set title "Comparativa: Algoritmos Híbridos y Lineales (Suma de Operaciones)"
-plot 'resultados.csv' using 2:(stringcolumn(1) eq "ShellSort" ? ($3+$4+$5) : 1/0) title "ShellSort" with linespoints lc rgb '#46F0F0' lw 2 pt 17 ps 1.5, \
-     '' using 2:(stringcolumn(1) eq "TimSort" ? ($3+$4+$5) : 1/0) title "TimSort" with linespoints lc rgb '#f032e6' lw 2 pt 19 ps 1.5, \
-     '' using 2:(stringcolumn(1) eq "CountingSort" ? ($3+$4+$5) : 1/0) title "CountingSort" with linespoints lc rgb '#bcf60c' lw 2 pt 21 ps 1.5, \
-     '' using 2:(stringcolumn(1) eq "RadixSort" ? ($3+$4+$5) : 1/0) title "RadixSort" with linespoints lc rgb '#fabebe' lw 2 pt 23 ps 1.5
-
-
 # ===================================================================
 # GRUPO 2: GRÁFICAS INDIVIDUALES (AHORA CON LA SINTAXIS CORRECTA)
 # ===================================================================
-print "\nGenerando 11 gráficas individuales..."
+print "\nGenerando 9 gráficas individuales..."
 set key top left
 
 # --- Gráfica 1: InsertionSort ---
@@ -86,18 +77,4 @@ set output 'grafica_individual_TimSort.png'
 set title 'Rendimiento de TimSort'
 plot 'resultados.csv' using 2:(stringcolumn(1) eq "TimSort" ? ($3+$4+$5) : 1/0) title "TimSort" with linespoints pt 7 lc 9
 
-# --- Gráfica 10: CountingSort ---
-set output 'grafica_individual_CountingSort.png'
-set title 'Rendimiento de CountingSort'
-set yrange [0:*]
-plot 'resultados.csv' using 2:(stringcolumn(1) eq "CountingSort" ? ($3+$4+$5) : 1/0) title "CountingSort" with linespoints pt 7 lc 10
-unset yrange
-
-# --- Gráfica 11: RadixSort ---
-set output 'grafica_individual_RadixSort.png'
-set title 'Rendimiento de RadixSort'
-set yrange [0:*]
-plot 'resultados.csv' using 2:(stringcolumn(1) eq "RadixSort" ? ($3+$4+$5) : 1/0) title "RadixSort" with linespoints pt 7 lc 11
-unset yrange
-
-print "\n¡Proceso completado! Se generaron 14 gráficas."
+print "\n¡Proceso completado! Se generaron 11 gráficas."
